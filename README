@@ -1,8 +1,12 @@
-This is the starter code for the BSTGuesser workshop. 
+This is the solution code for the BSTGuesser workshop.
 This workshop is part of the Applied CS with Android course:
 
 http://g.co/cswithandroid
 
 Check the website for detailed instructions on how to implement this activity.
+
+Extension
+
+- Add another button to the UI that causes a single node to be added to the tree. Use this to visualize the rebalancing of the tree.
 
 Version 1.0
