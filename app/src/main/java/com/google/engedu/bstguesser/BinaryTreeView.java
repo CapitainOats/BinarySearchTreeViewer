@@ -84,6 +84,12 @@ public class BinaryTreeView extends View {
                         invalidate();
                         if (hitValue != targetValue) {
                             tree.invalidateNode(targetValue);
+                            // Remove mis-clicked number from the searchSequence.
+                            for (int i = 0; i < searchSequence.size(); i++) {
+                                if (searchSequence.get(i) == hitValue) {
+                                    searchSequence.remove(i);
+                                }
+                            }
                         }
                         searchPosition++;
                         updateMessage();

@@ -49,13 +49,18 @@ public class BinarySearchTree {
         return root.click(x, y, target);
     }
 
+    // Find the node that they were supposed to click.
     private TreeNode search(int value) {
         TreeNode current = root;
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        while (value != current.getValue()) {
+            if (value < current.getValue()) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+
         return current;
     }
 
