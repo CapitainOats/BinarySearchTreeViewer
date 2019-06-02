@@ -32,7 +32,7 @@ public class BinarySearchTree {
             root = new TreeNode(value);
             return;
         } else {
-            root.insert(value);
+            root = root.insert(root, value);
         }
     }
 

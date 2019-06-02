@@ -39,22 +39,34 @@ public class TreeNode {
         right = null;
     }
 
-    // Values smaller than a node must be stored in its left descendants and values greater than
-    // a node must be stored in its right descendants.
-    public void insert(int valueToInsert) {
-        if (valueToInsert < getValue()) {
-            if (left == null) {
-                left = new TreeNode(valueToInsert);
-            } else {
-                left.insert(valueToInsert);
-            }
-        } else {
-            if (right == null) {
-                right = new TreeNode(valueToInsert);
-            } else {
-                right.insert(valueToInsert);
-            }
+    /* Values smaller than a node must be stored in its left descendants and values greater than
+      a node must be stored in its right descendants.
+      This method always return root node.
+      */
+    public TreeNode insert(TreeNode currentNode, int valueToInsert) {
+        if (currentNode == null) {
+            return new TreeNode(valueToInsert);
         }
+
+        if (valueToInsert < currentNode.value) {
+            currentNode.left = insert(currentNode.left, valueToInsert);
+        } else if (valueToInsert > currentNode.value) {
+            currentNode.right = insert(currentNode.right, valueToInsert);
+        }
+
+        currentNode = balanceTree(currentNode, valueToInsert);
+
+        currentNode.height = calculateTreeHeight(currentNode);
+
+        return currentNode;
+    }
+
+    // Get balance factor of TreeNode.
+    public int getBalance(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return height(node.left) - height(node.right);
     }
 
     public int getValue() {
@@ -131,5 +143,79 @@ public class TreeNode {
     public void invalidate() {
         color = Color.CYAN;
         showValue = true;
+    }
+
+    private TreeNode balanceTree(TreeNode currentNode, int valueToInsert) {
+        int balance = getBalance(currentNode);
+
+        // Right-right case.
+        if (balance < -1 && valueToInsert > currentNode.right.value) {
+            return leftRotate(currentNode);
+        }
+
+        // Left-left case.
+        if (balance > 1 && valueToInsert < currentNode.left.value) {
+            return rightRotate(currentNode);
+        }
+
+        // Left-right case.
+        if (balance > 1 && valueToInsert > currentNode.left.value) {
+            currentNode.left = leftRotate(currentNode.left);
+            return rightRotate(currentNode);
+        }
+
+        // Right-left case.
+        if (balance < -1 && valueToInsert < currentNode.right.value) {
+            currentNode.right = rightRotate(currentNode.right);
+            return leftRotate(currentNode);
+        }
+
+        return currentNode;
+
+    }
+
+    private int height(TreeNode currentNode) {
+        if (currentNode == null) {
+            return -1;
+        }
+        return currentNode.height;
+    }
+
+    private int calculateTreeHeight(TreeNode currentNode) {
+        return Math.max(height(currentNode.left), height(currentNode.right)) + 1;
+    }
+
+    private TreeNode leftRotate(TreeNode currentNode) {
+        TreeNode newRootNode = currentNode.right;
+        TreeNode leftChildOfRight = newRootNode.left;
+
+        // Step 1. set the left child of the new root node
+        newRootNode.left = currentNode;
+
+        // Step 2. set the right child of the new left child
+        currentNode.right = leftChildOfRight;
+
+        // Step 3. Update the height of the trees that were updated.
+        newRootNode.height = calculateTreeHeight(newRootNode);
+        currentNode.height = calculateTreeHeight(currentNode);
+
+        return newRootNode;
+    }
+
+    private TreeNode rightRotate(TreeNode currentNode) {
+        TreeNode newRootNode = currentNode.left;
+        TreeNode rightChildOfLeft = newRootNode.right;
+
+        // Step 1. Set newRootNode as the new root node.
+        newRootNode.right = (currentNode);
+
+        // Step 2. Set the right child of the new left child of the new root node. Quite a tongue twister right?
+        currentNode.left = (rightChildOfLeft);
+
+        // Step 3. Update the height of the trees that were updated.
+        newRootNode.height = (calculateTreeHeight(newRootNode));
+        currentNode.height = (calculateTreeHeight(currentNode));
+
+        return newRootNode;
     }
 }
